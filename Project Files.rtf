@@ -1,0 +1,559 @@
+{\rtf1\ansi\ansicpg1252\cocoartf2513
+\cocoatextscaling0\cocoaplatform0{\fonttbl\f0\fswiss\fcharset0 Helvetica;}
+{\colortbl;\red255\green255\blue255;}
+{\*\expandedcolortbl;;}
+\margl1440\margr1440\vieww10800\viewh8400\viewkind0
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+
+\f0\fs24 \cf0 \'97\'97\'97\'97\'97 PROJECT 1 \'97\'97\'97\'97\'97 \
+\
+import board\
+import digitalio\
+import time\
+ \
+led = digitalio.DigitalInOut(board.D13)\
+led.direction = digitalio.Direction.OUTPUT\
+ \
+while True:\
+    led.value = True\
+    time.sleep(0.5)\
+    led.value = False\
+    time.sleep(0.5)\
+\
+\'97\'97\'97\'97\'97 PROJECT 2 \'97\'97\'97\'97\'97 \
+\
+# Gives access to the board hardware\
+import board\
+# digitalio : Module that provides classes you can use to interact\
+# with digital components\
+# DigitalInOut : Digital pin object that provides functions and\
+# parameters you can set for a digital pin\
+# Direction : Define if digital pin excepts input or provides output\
+# Pull : Define default for input (Up : High, Down: Low)\
+from digitalio import DigitalInOut, Direction, Pull\
+# Allows us to work with NeoPixels\
+# You need to put the library in the lib folder\
+import neopixel\
+# Allows use to pause code execution\
+import time\
+\
+# Assign led to pin D13\
+led = DigitalInOut(board.D13)\
+# Set that the led will output (Turn on and off)\
+led.direction = Direction.OUTPUT\
+\
+# Say we want to manipulate up to 1 NeoPixel\
+pixels = neopixel.NeoPixel(board.NEOPIXEL, 2, brightness=0.1)\
+\
+# Assign a_but to pin / button D4\
+a_but = DigitalInOut(board.D4)\
+# Set that it is an input pin\
+a_but.direction = Direction.INPUT\
+# Set it to low by default\
+a_but.pull = Pull.DOWN\
+\
+# Do the same for button b\
+b_but = DigitalInOut(board.D5)\
+b_but.direction = Direction.INPUT\
+b_but.pull = Pull.DOWN\
+\
+# Do the same for the switch except set pull to UP\
+switch = DigitalInOut(board.D7)\
+switch.direction = Direction.INPUT\
+switch.pull = Pull.UP\
+\
+# This loops forever\
+while True:\
+    # If A button is pressed the led turns on\
+    if a_but.value:\
+        led.value = True\
+        print("A Pressed")\
+    else:\
+        led.value = False\
+        print("A Not Pressed")\
+        \
+    # If B button is pressed the NeoPixel lights up Red\
+    # 0 refers to the 1st pixel\
+    if b_but.value:\
+        pixels[0] = (255, 0, 0)\
+        print("B Pressed")\
+    # Otherwise it turns off\
+    else:\
+        pixels[0] = (0, 0, 0)\
+        print("A Not Pressed")\
+        \
+    if switch.value:\
+        pixels[1] = (0, 255, 0)\
+        print("Switch On")\
+    else:\
+        pixels[1] = (0, 0, 0)\
+        print("Switch Off")\
+        \
+    time.sleep(0.2)\
+\
+\'97\'97\'97\'97\'97 PROJECT 3 \'97\'97\'97\'97\'97 \
+\
+import math\
+import time\
+\
+# Accurate to 5 digits\
+f1 = 1.111111\
+f2 = 1.111111\
+print(f1 + f2)\
+# Cast with int, float, str\
+print("Cast ", int(f1))\
+# Math Operators\
+print("5 + 2 =", 5 + 2)\
+# Formatted print with 2 decimals or less\
+print("5 - 2 = \{:.2f\}".format(5 - 2))\
+print("5 * 2 =", 5 * 2)\
+print("5 / 2 =", 5 / 2)\
+print("5 % 2 =", 5 % 2)\
+print("5 ** 2 =", 5 ** 2)\
+print("5 // 2 =", 5 // 2)\
+\
+# ----- Math Functions -----\
+print("abs(-1) ", abs(-1))\
+print("max(5, 4) ", max(5, 4))\
+print("min(5, 4) ", min(5, 4))\
+print("pow(2, 2) ", pow(2, 2))\
+print("ceil(4.5) ", math.ceil(4.5))\
+print("floor(4.5) ", math.floor(4.5))\
+print("round(4.5) ", round(4.5))\
+print("exp(1) ", math.exp(1))  # e**x\
+print("log(e) ", math.log(math.exp(1)))\
+print("log(100) ", math.log(100, 10))  # Base 10 Log\
+print("sqrt(100) ", math.sqrt(100))\
+print("sin(0) ", math.sin(0))\
+print("cos(0) ", math.cos(0))\
+print("tan(0) ", math.tan(0))\
+print("asin(0) ", math.asin(0))\
+print("acos(0) ", math.acos(0))\
+print("atan(0) ", math.atan(0))\
+print("radians(0) ", math.radians(0))\
+print("degrees(pi) ", math.degrees(math.pi))\
+\
+# Random number between 1 and 100\
+print("Random", random.randint(1, 101))\
+\
+\'97\'97\'97\'97\'97 PROJECT 4 \'97\'97\'97\'97\'97 \
+\
+import time\
+import board\
+from analogio import AnalogIn\
+import neopixel\
+\
+# Connect A1 as an analog input\
+analog_in = AnalogIn(board.A3)\
+\
+# Holds the pixel count before changes\
+px_prev_num = 0\
+\
+# Holds changing pixel count\
+px_cur_num = 0\
+\
+# Create a pixel list with a maximum of 10 pixels\
+pixels = neopixel.NeoPixel(board.NEOPIXEL, 10, brightness=0.1)\
+\
+def update_pixels():\
+    # If number of pixels to light changed clear\
+    # and redraw with new value\
+    if px_prev_num is not px_cur_num:\
+        pixels.fill(0)\
+    # Cycles through and lights pixels as voltage changes\
+    for i in range(num_pixels):\
+        pixels[i] = (255, 0, 0)\
+\
+\
+while True:\
+    # Readings range from 0 to 65535\
+    a_val = analog_in.value\
+    # Convert to a range from 0 to 3.3V\
+    print((a_val * 3.3) / 65536)\
+\
+    # Put analog value into values of 0 to 10\
+    px_cur_num = int(a_val / 6553)\
+    update_pixels()\
+    time.sleep(.2)\
+\
+\'97\'97\'97\'97\'97 PROJECT 5 \'97\'97\'97\'97\'97 \
+\
+# Tons of display functions\
+import displayio\
+# Provides font\
+import terminalio\
+# Provides label\
+from adafruit_display_text import label\
+# Functions for the Gizmo display\
+from adafruit_gizmo import tft_gizmo\
+# Used for sleep\
+import time\
+# Access to analogio hardware\
+import analogio\
+# Access to CPB Hardware\
+import board\
+# Temperature sensor\
+import adafruit_thermistor\
+# Used for sound sensor\
+from adafruit_circuitplayground import cp\
+\
+# Create the TFT Gizmo display object\
+display = tft_gizmo.TFT_Gizmo()\
+\
+# Create a group we can add 10 elements to\
+splash = displayio.Group(max_size=30)\
+# Display the group of elements\
+display.show(splash)\
+\
+# Get temperature data in F\
+temp_f = cp.temperature * 9 / 5 + 32\
+temp_str = "Temp: " + str(temp_f) + "\\n"\
+\
+# Get sound volume\
+sound_str = "Sound: " + str(cp.sound_level) + "\\n"\
+\
+# Get access to light sensor data\
+light_str = "Light: " + str(cp.light) + "\\n"\
+\
+# Get tilt information\
+x, y, z = cp.acceleration\
+tilt_str = "X: " + str(x) + "\\nY: " + str(y) + "\\nZ: " + str(z)\
+\
+# Draw a label\
+# Set size and scale it by 2 placing it at x/y position\
+text_group = displayio.Group(max_size=10, scale=2, x=10, y=10)\
+# Text to display\
+text = temp_str + sound_str + light_str + tilt_str\
+# Use the terminalio font in yellow\
+text_area = label.Label(terminalio.FONT, text=text, color=0xFFFF00)\
+# Append to a subgroup\
+text_group.append(text_area)\
+# Add text to screen\
+splash.append(text_group)\
+\
+# Infinite loop that updates data and display\
+while True:\
+    # Sleep for 1 second and then update data and screen\
+    time.sleep(1)\
+\
+    temp_f = cp.temperature * 9 / 5 + 32\
+    temp_str = "Temp: " + str(temp_f) + "\\n"\
+    sound_str = "Sound: " + str(cp.sound_level) + "\\n"\
+    light_str = "Light: " + str(cp.light) + "\\n"\
+    x, y, z = cp.acceleration\
+    tilt_str = "X: " + str(x) + "\\nY: " + str(y) + "\\nZ: " + str(z)\
+\
+    text_area.text = temp_str + sound_str + light_str + tilt_str\
+    display.show(splash)\
+    display.refresh()\
+\
+\'97\'97\'97\'97\'97 PROJECT 6 \'97\'97\'97\'97\'97 \
+\
+# ----- Conditionals -----\
+# Comparison Operators : < > <= >= == !=\
+# Logical Operators : and or not\
+age = 6\
+if age < 5:\
+    print("Stay Home")\
+elif (age >= 5) and (age < 6):\
+    print("Kindergarten")\
+elif (age >= 6) and (age <= 17):\
+    print("Grade \{:d\}".format(age - 5))\
+else:\
+    print("College")\
+\
+\'97\'97\'97\'97\'97 PROJECT 7 \'97\'97\'97\'97\'97 \
+\
+# Tons of hardware functions\
+from adafruit_circuitplayground import cp\
+import time\
+\
+# Define that we react based on 1 tap\
+# Can also be set to 2\
+cp.detect_taps = 1\
+\
+NOTE_C4 = 261.63\
+NOTE_D4 = 293.66\
+NOTE_E4 = 329.63\
+\
+# List of Mary Lil Lamb Notes\
+l1 = [NOTE_E4, NOTE_D4, NOTE_C4, NOTE_D4, NOTE_E4, NOTE_E4, NOTE_E4]\
+\
+while True:\
+    # Mary Lil Lamb : E D C D E E E\
+    # D D D E G G  E D C D E E E  E D D E D C\
+    if cp.tapped:\
+        print("Tap")\
+        # Frequency for middle C4 with 1s duration\
+        cp.play_tone(261.63, .5)\
+    # D4\
+    if cp.button_a:\
+        cp.play_tone(293.66, .5)\
+    # E4\
+    if cp.button_b:\
+        cp.play_tone(329.63, .5)\
+    # G4\
+    if cp.touch_A1:\
+        cp.play_tone(392.00, .5)\
+    if cp.touch_A2:\
+        for i in range(len(l1)):\
+            cp.play_tone(l1[i], .5)\
+\
+\'97\'97\'97\'97\'97 PROJECT 8 \'97\'97\'97\'97\'97 \
+\
+# Provides functions for reading IR input\
+import pulseio\
+import board\
+# Provides functions for decoding IR input\
+import adafruit_irremote\
+ \
+# Read IR input from pin IR Receiver, \
+# record up to 120 pulses and turn idle state on\
+pulsein = pulseio.PulseIn(board.IR_RX, maxlen=120, idle_state=True)\
+# Decodes infrared signals\
+decoder = adafruit_irremote.GenericDecode()\
+ \
+while True:\
+    # Read pulses until they stop \
+    pulses = decoder.read_pulses(pulsein)\
+    try:\
+        # Decodes the pulses into bits\
+        received_code = decoder.decode_bits(pulses)\
+        print("Decoded : ", received_code)\
+    except adafruit_irremote.IRNECRepeatException:\
+        print("Received Strange Code")\
+        continue\
+    except adafruit_irremote.IRDecodeException as e:\
+        print("Failed to decode")\
+        continue\
+\
+# Power : [255, 0, 93, 162]\
+# 1 : [255, 0, 207, 48]\
+# 2 : [255, 0, 231, 24]\
+# 3 : [255, 0, 133, 122]\
+# 5 : [255, 0, 199, 56]\
+\
+\'97\'97\'97\'97\'97 PROJECT 9 \'97\'97\'97\'97\'97 \
+\
+import time\
+from adafruit_crickit import crickit\
+ \
+print("Test Servo")\
+crickit.servo_1.angle = 15\
+time.sleep(1)\
+crickit.servo_1.angle = 90\
+time.sleep(1)\
+crickit.servo_1.angle = 165\
+time.sleep(1)\
+ \
+while True:\
+    print("Repeat")\
+    crickit.servo_1.angle = 15      # right\
+    time.sleep(1)\
+    crickit.servo_1.angle = 90     # middle\
+    time.sleep(1)\
+    crickit.servo_1.angle = 165    # left\
+    time.sleep(1)\
+    crickit.servo_1.angle = 90     # middle\
+    time.sleep(1)\
+    # and repeat!\
+\
+\'97\'97\'97\'97\'97 PROJECT 10 \'97\'97\'97\'97\'97 \
+\
+import time\
+import board\
+import pwmio\
+from adafruit_motor import servo\
+\
+# Creates a PWMOut object and assigns pin A3 to it\
+# The duty cycle is the percent in which the pulse is high\
+# Frequency in hertz\
+pwm = pwmio.PWMOut(board.A3, duty_cycle=2 ** 15, frequency=50)\
+\
+# Creates a servo object that is passed all the data\
+# assigned to the PWMOut object \
+my_servo = servo.Servo(pwm)\
+\
+while True:\
+    for angle in range(15, 165, 5):  # 15 - 165 degrees, 5 degrees at a time.\
+        my_servo.angle = angle\
+        time.sleep(0.05)\
+    for angle in range(165, 15, -5): # 165 - 15 degrees, 5 degrees at a time.\
+        my_servo.angle = angle\
+        time.sleep(0.05)\
+\
+\'97\'97\'97\'97\'97 PROJECT 11 \'97\'97\'97\'97\'97 \
+\
+import time\
+import board\
+import adafruit_hcsr04\
+\
+# For the library to work you just define where the trigger and echo pins\
+# are connected\
+# A2 is D9 and A3 is D10\
+sonar = adafruit_hcsr04.HCSR04(trigger_pin=board.D9, echo_pin=board.D10)\
+\
+while True:\
+    try:\
+        # Returns distance in cms\
+        print(sonar.distance)\
+    except RuntimeError:\
+        print("Retrying!")\
+    time.sleep(0.1)\
+\
+\'97\'97\'97\'97\'97 PROJECT 12 \'97\'97\'97\'97\'97\
+\
+import time\
+import board\
+import adafruit_hcsr04\
+# Needed for the Crickit\
+from adafruit_crickit import crickit\
+\
+# For the library to work you just define where the trigger and echo pins\
+# are connected\
+# A2 is D9 and A3 is D10\
+sonar = adafruit_hcsr04.HCSR04(trigger_pin=board.D9, echo_pin=board.D10)\
+\
+# Allows us to manipulate motor speed and direction\
+m_1 = crickit.dc_motor_1\
+m_2 = crickit.dc_motor_2\
+\
+while True:\
+    try:\
+        # Go forward 100% with both tires\
+        m_1.throttle = -1\
+        m_2.throttle = 1\
+        # Returns the distance in cms\
+        s_dist = sonar.distance\
+        \
+        if s_dist <= 20:\
+            m_1.throttle = 1\
+            m_2.throttle = 0\
+            print(s_dist)\
+            time.sleep(1.5)\
+        else:\
+            m_1.throttle = -1\
+            m_2.throttle = 1\
+        \
+    except RuntimeError:\
+        print("Error")\
+\
+\'97\'97\'97\'97\'97 PROJECT 13 \'97\'97\'97\'97\'97\
+\
+# Provides functions for reading IR input\
+import pulseio\
+import board\
+# Provides functions for decoding IR input\
+import adafruit_irremote\
+from adafruit_crickit import crickit\
+\
+is_off = True\
+\
+m_1 = crickit.dc_motor_1\
+m_2 = crickit.dc_motor_2\
+\
+pow_b = 162\
+left_b = 48\
+forward_b = 24\
+right_b = 122\
+back_b = 56\
+\
+# Read IR input from pin D2, record up to 120 pulses and turn idle state on\
+pulsein = pulseio.PulseIn(board.IR_RX, maxlen=120, idle_state=True)\
+# Decodes infrared signals\
+decoder = adafruit_irremote.GenericDecode()\
+\
+while True:\
+    # Read pulses until they stop \
+    pulses = decoder.read_pulses(pulsein)\
+    # Output number of pulses and their values in a list\
+    print("Heard", len(pulses), "Pulses:", pulses)\
+    try:\
+        # Decodes the pulses into bits\
+        code = decoder.decode_bits(pulses)\
+        print("Decoded:", code)\
+        \
+        if (code[3] == pow_b) and is_off:\
+            print("On")\
+            is_off = False\
+            m_1.throttle = -1\
+            m_2.throttle = 1\
+            continue\
+            \
+        if (code[3] == pow_b) and not is_off:\
+            print("Off")\
+            is_off = True\
+            m_1.throttle = 0\
+            m_2.throttle = 0\
+            continue\
+            \
+        if (code[3] == left_b) and not is_off:\
+            print("Left")\
+            is_off = False\
+            m_1.throttle = -1\
+            m_2.throttle = 0\
+            continue\
+            \
+        if (code[3] == right_b) and not is_off:\
+            print("Right")\
+            is_off = False\
+            m_1.throttle = 0\
+            m_2.throttle = 1\
+            continue\
+            \
+        if (code[3] == forward_b) and not is_off:\
+            print("Forward")\
+            is_off = False\
+            m_1.throttle = -1\
+            m_2.throttle = 1\
+            continue\
+            \
+        if (code[3] == back_b) and not is_off:\
+            print("Backward")\
+            is_off = False\
+            m_1.throttle = 1\
+            m_2.throttle = -1\
+            continue\
+        \
+    except adafruit_irremote.IRNECRepeatException: # unusual short code!\
+        print("NEC repeat!")\
+    except adafruit_irremote.IRDecodeException as e: # failed to decode\
+        print("Failed to decode: ", e.args)\
+\
+\'97\'97\'97\'97\'97 MORE NOT IN VIDEO \'97\'97\'97\'97\'97\
+\
+1.	Import board -> dir(board) : Lists hardware on your board\
+2.	There are Pins that are easy to identify\
+3.	The CPB and CPX come with an accelerometer that provide acceleration data in the X, Y, Z direction as well as taps and shakes in m/s2 (Measured by attaching a mass to a spring that is between plates. Capacitance changes between the plates and the mass when moved. )\
+4.	The microcontroller communicates with slave components like the accelerometer using the Inter-Integrated Circuit protocol (I2C) I Squared C.\
+5.	Each slave component has a unique address. When the microcontroller wants a slave to do something it sends a message to every slave with a unique address so the slave knows which one is supposed to respond to the message.\
+6.	The interrupt can signal to the microprocessor that it needs to be addressed\
+7.	SCL : Clock Pin that sends a clock signal. \
+8.	SDA : Data pin that is used to send and receive data. \
+9.	The SCL and SDA fluctuate in specific ways to signal when a message begins and ends\
+10.	A Start Signal is sent : SDA folds while SCL stays high\
+11.	Then send the component address which is a 7 digit binary number unique to each component\
+12.	0 if write to slave or 1 to read from slave\
+13.	Then bytes (8 bits) of data are sent. \
+14.	A Stop Condition ends the transfer\
+15.	Audio is the A0 port, which you can connect to a headphone or speaker\
+16.	Buttons and digital pins\
+17.	I talked about what I2C, SCL and SDA are\
+18.	L is the D13 LED\
+19.	Light is the light sensor\
+20.	Microphone clock and data (Sound Sensor)\
+21.	The Serial Peripheral Interface (SPI) is also used to send and receive data\
+a.	It uses 3 to 4 wires for sending and receiving data\
+b.	MISO : Main Input Secondary Output\
+c.	MOSI : Main Output Secondary Input\
+d.	SCK : SPI Clock Line\
+22.	Neopixel can interact with any NeoPixel\
+23.	Universal Asynchronous Receiver Transmitter (UART)\
+a.	Transferring of data between 2 devices using only 2 wires asynchronously \
+b.	Asynchronous transfer is when there is no clock signal (Synchronized)\
+c.	The transmitting UART adds start and stop bits to data packets\
+d.	When a start bit is detected data is read in a defined bit per second rate (Baud Rate)\
+e.	The receiving UART reads data at its RX Pin\
+f.	Data is sent from the TX Pin\
+24.	There is also the power switch, slide switch, speaker and temperature sensor\
+}
